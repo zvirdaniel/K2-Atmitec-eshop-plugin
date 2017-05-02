@@ -14,11 +14,53 @@ import com.intellij.util.ProcessingContext
  */
 class K2CompletionProvider : CompletionProvider<CompletionParameters>() {
     public override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, resultSet: CompletionResultSet) {
-        val project = parameters.editor.project
-        val file = parameters.originalFile.virtualFile
-        val root: Array<out VirtualFile>? = project?.let { ProjectRootManager.getInstance(it).getContentSourceRoots() };
-        val fileList = root?.asList()
+        val files = ProjectRootManager.getInstance(parameters.editor.project!!).contentSourceRoots.asList()
 
-        resultSet.addElement(LookupElementBuilder.create("aaa_auto"))
+        if (files.isEmpty()) return
+
+        val standard = findFolder("standard", files)?.findChild("views")
+        val special = findFolder("special", files)?.findChild("views")
+
+        if (standard == null && special == null) return
+
+        val standardChildren = standard?.let { findAllChildrenFiles(it) }
+        val specialChildren = special?.let { findAllChildrenFiles(it) }
+
+        standardChildren?.forEach {
+            resultSet.addElement(findElement(it))
+        }
+
+        specialChildren?.forEach {
+            resultSet.addElement(findElement(it))
+        }
+    }
+
+    private fun findAllChildrenFiles(directory: VirtualFile): List<VirtualFile> {
+        val result = mutableListOf<VirtualFile>()
+
+        for (item in directory.children) {
+            if (item.isDirectory) {
+                result.addAll(findAllChildrenFiles(item))
+            } else {
+                result.add(item)
+            }
+        }
+
+        return result
+    }
+
+    private fun findElement(file: VirtualFile) = LookupElementBuilder.create(file.presentableUrl.substringAfter("views/").substringBefore('.'))
+
+    private fun findFolder(name: String, files: List<VirtualFile>): VirtualFile? {
+        var result: VirtualFile? = null
+
+        for (file in files) {
+            if (file.isDirectory) {
+                if (file.name == name && file.isDirectory) {
+                    result = file
+                }
+            }
+        }
+        return result
     }
 }
