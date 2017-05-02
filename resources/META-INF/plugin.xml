@@ -1,15 +1,17 @@
 <idea-plugin>
     <id>cz.k2.eshop</id>
     <name>K2 E-Shop Integration</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <vendor email="Daniel.Zvir@k2.cz" url="http://www.k2.cz">K2 atmitec s.r.o.</vendor>
 
     <description><![CDATA[
-      This plugin was made for <b>internal use only</b>.<br>
+      This plugin enables custom functionality used in our company, when developing the responsive version of our eshop.<br>
+      You can click-through file references in the GetTemplate function, and use file completion for all the files.<br>
     ]]></description>
 
     <change-notes><![CDATA[
-      This is the first version. It provides references to .phtml files from GetTemplate functions.<br>
+      1.0: Enables references to phtml files from the GetTemplate function<br>
+      1.1: Code completion of phtml files in the GetTemplate function<br>
     ]]>
     </change-notes>
 
