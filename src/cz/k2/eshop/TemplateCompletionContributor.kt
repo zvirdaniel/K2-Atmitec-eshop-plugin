@@ -14,7 +14,7 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
  * Package: cz.k2.eshop
  * Created by Daniel Zvir on 26.4.17.
  */
-class K2CompletionContributor : CompletionContributor() {
+class TemplateCompletionContributor : CompletionContributor() {
     init {
         val templateMethodPattern = object : PsiNamePatternCondition<PsiElement>("withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
             override fun getPropertyValue(o: Any): String? {
@@ -28,6 +28,6 @@ class K2CompletionContributor : CompletionContributor() {
 
         val elementPattern = psiWithParentString.withSuperParent(2, psiWithTypeParamList).withSuperParent(3, psiWithGetTemplateCall)
 
-        extend(CompletionType.BASIC, elementPattern, K2CompletionProvider())
+        extend(CompletionType.BASIC, elementPattern, TemplateCompletionProvider())
     }
 }

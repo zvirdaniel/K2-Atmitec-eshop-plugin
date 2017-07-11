@@ -8,7 +8,7 @@ import com.intellij.psi.PsiReferenceBase
  * Package: cz.k2.eshop
  * Created by Daniel Zvir on 26.4.17.
  */
-class SpecialGetTemplateReference internal constructor(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
+class SpecialTemplateReference internal constructor(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
     val project = myElement.project
     val parameterData = myElement.text.substring(1, myElement.textLength - 1)
     val destinationString = "special/views/$parameterData.phtml"

@@ -12,9 +12,10 @@ import com.intellij.util.ProcessingContext
  * Package: cz.k2.eshop
  * Created by Daniel Zvir on 26.4.17.
  */
-class K2CompletionProvider : CompletionProvider<CompletionParameters>() {
+class TemplateCompletionProvider : CompletionProvider<CompletionParameters>() {
     public override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, resultSet: CompletionResultSet) {
-        val files = ProjectRootManager.getInstance(parameters.editor.project!!).contentSourceRoots.asList()
+        val project = parameters.editor.project!!
+        val files = ProjectRootManager.getInstance(project).contentSourceRoots.asList()
 
         if (files.isEmpty()) return
 
@@ -49,7 +50,11 @@ class K2CompletionProvider : CompletionProvider<CompletionParameters>() {
         return result
     }
 
-    private fun findElement(file: VirtualFile) = LookupElementBuilder.create(file.presentableUrl.substringAfter("views/").substringBefore('.'))
+    private fun findElement(file: VirtualFile): LookupElementBuilder {
+        val presentableUrl = file.presentableUrl.replace("\\", "/")
+        val result = presentableUrl.substringAfter("views/").substringBefore('.')
+        return LookupElementBuilder.create(result)
+    }
 
     private fun findFolder(name: String, files: List<VirtualFile>): VirtualFile? {
         var result: VirtualFile? = null

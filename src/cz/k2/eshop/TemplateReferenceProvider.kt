@@ -9,10 +9,10 @@ import com.intellij.util.ProcessingContext
  * Package: cz.k2.eshop
  * Created by Daniel Zvir on 26.4.17.
  */
-class K2ReferenceProvider : PsiReferenceProvider() {
+class TemplateReferenceProvider : PsiReferenceProvider() {
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-        val specialGetTemplateReference = SpecialGetTemplateReference(element)
-        val standardGetTemplateReference = StandardGetTemplateReference(element)
+        val specialGetTemplateReference = SpecialTemplateReference(element)
+        val standardGetTemplateReference = StandardTemplateReference(element)
         val result: MutableList<PsiReference> = mutableListOf<PsiReference>()
 
         if (specialGetTemplateReference.psiFile != null) {

@@ -13,7 +13,7 @@ import com.jetbrains.php.lang.psi.elements.FunctionReference
  * Package: cz.k2.eshop
  * Created by Daniel Zvir on 25.4.17.
  */
-class K2ReferenceContributor : PsiReferenceContributor() {
+class TemplateReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         val templateMethodPattern = object : PsiNamePatternCondition<PsiElement>("withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
             override fun getPropertyValue(o: Any): String? {
@@ -25,6 +25,6 @@ class K2ReferenceContributor : PsiReferenceContributor() {
                 withParent(psiElement().withElementType(PhpElementTypes.PARAMETER_LIST).withParent(psiElement().
                         withElementType(PhpElementTypes.FUNCTION_CALL).with(templateMethodPattern)))
 
-        registrar.registerReferenceProvider(elementPattern, K2ReferenceProvider(), PsiReferenceRegistrar.DEFAULT_PRIORITY)
+        registrar.registerReferenceProvider(elementPattern, TemplateReferenceProvider(), PsiReferenceRegistrar.DEFAULT_PRIORITY)
     }
 }

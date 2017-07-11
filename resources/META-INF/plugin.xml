@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>cz.k2.eshop</id>
     <name>K2 E-Shop Integration</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <vendor email="Daniel.Zvir@k2.cz" url="http://www.k2.cz">K2 atmitec s.r.o.</vendor>
 
     <description><![CDATA[
@@ -10,23 +10,24 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      1.0: Enables references to phtml files from the GetTemplate function<br>
+      1.2: GetTemplate fix for Windows users, Translate function shows translations<br>
       1.1: Code completion of phtml files in the GetTemplate function<br>
+      1.0: Enables references to phtml files from the GetTemplate function<br>
     ]]>
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="145.0"/>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html       on how to target different products -->
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends>com.jetbrains.php</depends>
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <psi.referenceContributor implementation="cz.k2.eshop.K2ReferenceContributor"/>
-        <completion.contributor language="PHP" implementationClass="cz.k2.eshop.K2CompletionContributor"/>
+        <psi.referenceContributor implementation="cz.k2.eshop.TemplateReferenceContributor"/>
+        <completion.contributor language="PHP" implementationClass="cz.k2.eshop.TemplateCompletionContributor"/>
     </extensions>
 
     <actions>
