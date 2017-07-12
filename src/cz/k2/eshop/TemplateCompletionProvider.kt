@@ -14,58 +14,34 @@ import com.intellij.util.ProcessingContext
  */
 class TemplateCompletionProvider : CompletionProvider<CompletionParameters>() {
     public override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, resultSet: CompletionResultSet) {
-        val project = parameters.editor.project!!
-        val files = ProjectRootManager.getInstance(project).contentSourceRoots.asList()
+        val project = parameters.editor.project
+        if (project != null) {
+            val files = ProjectRootManager.getInstance(project).contentSourceRoots.asList()
 
-        if (files.isEmpty()) return
+            if (files.isEmpty()) return
 
-        val standard = findFolder("standard", files)?.findChild("views")
-        val special = findFolder("special", files)?.findChild("views")
+            val standard = findFolder("standard", files)?.findChild("views")
+            val special = findFolder("special", files)?.findChild("views")
 
-        if (standard == null && special == null) return
+            if (standard == null && special == null) return
 
-        val standardChildren = standard?.let { findAllChildrenFiles(it) }
-        val specialChildren = special?.let { findAllChildrenFiles(it) }
+            val standardChildren = standard?.let { findAllChildrenFiles(it) }
+            val specialChildren = special?.let { findAllChildrenFiles(it) }
 
-        standardChildren?.forEach {
-            resultSet.addElement(findElement(it))
-        }
+            standardChildren?.forEach {
+                resultSet.addElement(findElement(it))
+            }
 
-        specialChildren?.forEach {
-            resultSet.addElement(findElement(it))
-        }
-    }
-
-    private fun findAllChildrenFiles(directory: VirtualFile): List<VirtualFile> {
-        val result = mutableListOf<VirtualFile>()
-
-        for (item in directory.children) {
-            if (item.isDirectory) {
-                result.addAll(findAllChildrenFiles(item))
-            } else {
-                result.add(item)
+            specialChildren?.forEach {
+                resultSet.addElement(findElement(it))
             }
         }
-
-        return result
     }
 
-    private fun findElement(file: VirtualFile): LookupElementBuilder {
+    fun findElement(file: VirtualFile): LookupElementBuilder {
         val presentableUrl = file.presentableUrl.replace("\\", "/")
         val result = presentableUrl.substringAfter("views/").substringBefore('.')
+
         return LookupElementBuilder.create(result)
-    }
-
-    private fun findFolder(name: String, files: List<VirtualFile>): VirtualFile? {
-        var result: VirtualFile? = null
-
-        for (file in files) {
-            if (file.isDirectory) {
-                if (file.name == name && file.isDirectory) {
-                    result = file
-                }
-            }
-        }
-        return result
     }
 }
