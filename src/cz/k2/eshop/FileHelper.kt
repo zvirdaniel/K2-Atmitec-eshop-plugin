@@ -3,7 +3,6 @@ package cz.k2.eshop
 import com.intellij.openapi.vfs.VirtualFile
 
 /**
- * Package: cz.k2.eshop
  * Created by Daniel Zvir on 12.7.17.
  */
 fun findFolder(name: String, files: List<VirtualFile>): VirtualFile? {

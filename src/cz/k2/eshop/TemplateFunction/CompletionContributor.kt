@@ -1,4 +1,4 @@
-package cz.k2.eshop
+package cz.k2.eshop.TemplateFunction
 
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionType
@@ -11,10 +11,9 @@ import com.jetbrains.php.lang.psi.elements.FunctionReference
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
 
 /**
- * Package: cz.k2.eshop
  * Created by Daniel Zvir on 26.4.17.
  */
-class TemplateCompletionContributor : CompletionContributor() {
+class CompletionContributor : CompletionContributor() {
     init {
         val templateMethodPattern = object : PsiNamePatternCondition<PsiElement>("withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
             override fun getPropertyValue(o: Any): String? {
@@ -28,6 +27,6 @@ class TemplateCompletionContributor : CompletionContributor() {
 
         val elementPattern = psiWithParentString.withSuperParent(2, psiWithTypeParamList).withSuperParent(3, psiWithGetTemplateCall)
 
-        extend(CompletionType.BASIC, elementPattern, TemplateCompletionProvider())
+        extend(CompletionType.BASIC, elementPattern, CompletionProvider())
     }
 }

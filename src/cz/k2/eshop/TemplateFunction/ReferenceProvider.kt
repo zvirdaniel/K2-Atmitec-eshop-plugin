@@ -1,4 +1,4 @@
-package cz.k2.eshop
+package cz.k2.eshop.TemplateFunction
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
@@ -6,13 +6,12 @@ import com.intellij.psi.PsiReferenceProvider
 import com.intellij.util.ProcessingContext
 
 /**
- * Package: cz.k2.eshop
  * Created by Daniel Zvir on 26.4.17.
  */
-class TemplateReferenceProvider : PsiReferenceProvider() {
+class ReferenceProvider : PsiReferenceProvider() {
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-        val specialGetTemplateReference = SpecialTemplateReference(element)
-        val standardGetTemplateReference = StandardTemplateReference(element)
+        val specialGetTemplateReference = SpecialReference(element)
+        val standardGetTemplateReference = StandardReference(element)
         val result: MutableList<PsiReference> = mutableListOf<PsiReference>()
 
         if (specialGetTemplateReference.psiFile != null) {

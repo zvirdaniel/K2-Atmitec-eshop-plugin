@@ -1,4 +1,4 @@
-package cz.k2.eshop
+package cz.k2.eshop.TemplateFunction
 
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
@@ -7,12 +7,13 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.ProcessingContext
+import cz.k2.eshop.findAllChildrenFiles
+import cz.k2.eshop.findFolder
 
 /**
- * Package: cz.k2.eshop
  * Created by Daniel Zvir on 26.4.17.
  */
-class TemplateCompletionProvider : CompletionProvider<CompletionParameters>() {
+class CompletionProvider : CompletionProvider<CompletionParameters>() {
     public override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, resultSet: CompletionResultSet) {
         val project = parameters.editor.project
         if (project != null) {

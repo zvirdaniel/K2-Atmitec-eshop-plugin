@@ -27,9 +27,9 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <psi.referenceContributor implementation="cz.k2.eshop.TemplateReferenceContributor"/>
-        <completion.contributor language="PHP" implementationClass="cz.k2.eshop.TemplateCompletionContributor"/>
-        <postStartupActivity implementation="cz.k2.eshop.CaretListenerStartup"/>
+        <psi.referenceContributor implementation="cz.k2.eshop.TemplateFunction.ReferenceContributor"/>
+        <completion.contributor language="PHP" implementationClass="cz.k2.eshop.TemplateFunction.CompletionContributor"/>
+        <postStartupActivity implementation="cz.k2.eshop.TranslateFunction.Startup"/>
     </extensions>
 
     <actions>

@@ -1,16 +1,16 @@
-package cz.k2.eshop
+package cz.k2.eshop.TranslateFunction
 
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.WindowManager
+import cz.k2.eshop.findFolder
 
 /**
- * Package: cz.k2.eshop
  * Created by Daniel Zvir on 12.7.17.
  */
-class TranslateProvider(val project: Project, val files: List<VirtualFile>) {
+class Manager(val project: Project, val files: List<VirtualFile>) {
     fun hideTranslation() {
         WindowManager.getInstance().getStatusBar(project).setInfo(null)
     }
@@ -44,9 +44,7 @@ class TranslateProvider(val project: Project, val files: List<VirtualFile>) {
                     val line = document.getText(TextRange(lineStart, lineEnd)).trim()
 
                     if (line.contains("\$Lng['${id}']", true)) {
-                        val splitted = line.split("=")
-                        val translation = splitted.get(1).removeSurrounding("'")
-                        return "CS Special: ${translation}"
+                        return "CS Special: ${extractTranslation(line)}"
                     }
                 }
             }
@@ -62,17 +60,21 @@ class TranslateProvider(val project: Project, val files: List<VirtualFile>) {
                     val line = document.getText(TextRange(lineStart, lineEnd)).trim()
 
                     if (line.contains("\$Lng['${id}']", true)) {
-                        val splitted = line.split("=")
-                        var translation = splitted.get(1).removeSuffix(";")
-                        translation = translation.removeRange(0..1)
-                        val length = translation.length - 1
-                        translation = translation.removeRange(length..length)
-                        return "CS Standard: ${translation}"
+                        return "CS Standard: ${extractTranslation(line)}"
                     }
                 }
             }
         }
 
         return null
+    }
+
+    private fun extractTranslation(line: String): String {
+        val splitted = line.split("=")
+        var translation = splitted.get(1).removeSuffix(";")
+        translation = translation.removeRange(0..1)
+        val length = translation.length - 1
+        translation = translation.removeRange(length..length)
+        return translation
     }
 }
