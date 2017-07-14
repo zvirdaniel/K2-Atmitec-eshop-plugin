@@ -5,7 +5,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.WindowManager
-import cz.k2.eshop.findFolder
+import cz.k2.eshop.Base.findFolder
 
 /**
  * Created by Daniel Zvir on 12.7.17.

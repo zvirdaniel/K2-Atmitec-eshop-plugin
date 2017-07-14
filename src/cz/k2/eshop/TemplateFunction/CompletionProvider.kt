@@ -7,8 +7,8 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.ProcessingContext
-import cz.k2.eshop.findAllChildrenFiles
-import cz.k2.eshop.findFolder
+import cz.k2.eshop.Base.findAllChildrenFiles
+import cz.k2.eshop.Base.findFolder
 
 /**
  * Created by Daniel Zvir on 26.4.17.

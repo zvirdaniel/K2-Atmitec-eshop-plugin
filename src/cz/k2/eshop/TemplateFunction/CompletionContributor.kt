@@ -15,7 +15,7 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
  */
 class CompletionContributor : CompletionContributor() {
     init {
-        val templateMethodPattern = object : PsiNamePatternCondition<PsiElement>("withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
+        val templateFunctionPattern = object : PsiNamePatternCondition<PsiElement>("withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
             override fun getPropertyValue(o: Any): String? {
                 return if (o is FunctionReference) o.name else null
             }
@@ -23,9 +23,9 @@ class CompletionContributor : CompletionContributor() {
 
         val psiWithParentString = psiElement().withParent(StringLiteralExpression::class.java)
         val psiWithTypeParamList = psiElement().withElementType(PhpElementTypes.PARAMETER_LIST)
-        val psiWithGetTemplateCall = psiElement().withElementType(PhpElementTypes.FUNCTION_CALL).with(templateMethodPattern)
+        val psiWithTemplateCall = psiElement().withElementType(PhpElementTypes.FUNCTION_CALL).with(templateFunctionPattern)
 
-        val elementPattern = psiWithParentString.withSuperParent(2, psiWithTypeParamList).withSuperParent(3, psiWithGetTemplateCall)
+        val elementPattern = psiWithParentString.withSuperParent(2, psiWithTypeParamList).withSuperParent(3, psiWithTemplateCall)
 
         extend(CompletionType.BASIC, elementPattern, CompletionProvider())
     }

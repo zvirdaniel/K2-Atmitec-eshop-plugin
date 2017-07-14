@@ -1,9 +1,9 @@
-package cz.k2.eshop
+package cz.k2.eshop.Base
 
 import com.intellij.openapi.vfs.VirtualFile
 
 /**
- * Created by Daniel Zvir on 12.7.17.
+ * Created by Daniel Zvir on 14.7.17.
  */
 fun findFolder(name: String, files: List<VirtualFile>): VirtualFile? {
     var result: VirtualFile? = null

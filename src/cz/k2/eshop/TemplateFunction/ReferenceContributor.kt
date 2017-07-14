@@ -14,7 +14,7 @@ import com.jetbrains.php.lang.psi.elements.FunctionReference
  */
 class ReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
-        val templateMethodPattern = object : PsiNamePatternCondition<PsiElement>("withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
+        val templateFunctionPattern = object : PsiNamePatternCondition<PsiElement>("withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
             override fun getPropertyValue(o: Any): String? {
                 return if (o is FunctionReference) o.name else null
             }
@@ -22,7 +22,7 @@ class ReferenceContributor : PsiReferenceContributor() {
 
         val elementPattern = psiElement().withElementType(PhpElementTypes.STRING).
                 withParent(psiElement().withElementType(PhpElementTypes.PARAMETER_LIST).withParent(psiElement().
-                        withElementType(PhpElementTypes.FUNCTION_CALL).with(templateMethodPattern)))
+                        withElementType(PhpElementTypes.FUNCTION_CALL).with(templateFunctionPattern)))
 
         registrar.registerReferenceProvider(elementPattern, ReferenceProvider(), PsiReferenceRegistrar.DEFAULT_PRIORITY)
     }

@@ -11,9 +11,13 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
  * Created by Daniel Zvir on 12.7.17.
  */
 class CaretListener(val files: List<VirtualFile>) : CaretListener {
-    override fun caretAdded(e: CaretEvent?) {}
+    override fun caretAdded(e: CaretEvent?) {
+        if (e != null) caretPositionChanged(e)
+    }
 
-    override fun caretRemoved(e: CaretEvent?) {}
+    override fun caretRemoved(e: CaretEvent?) {
+        if (e != null) caretPositionChanged(e)
+    }
 
     override fun caretPositionChanged(e: CaretEvent) {
         val position = e.newPosition

@@ -10,18 +10,14 @@ import com.intellij.util.ProcessingContext
  */
 class ReferenceProvider : PsiReferenceProvider() {
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-        val specialGetTemplateReference = SpecialReference(element)
-        val standardGetTemplateReference = StandardReference(element)
-        val result: MutableList<PsiReference> = mutableListOf<PsiReference>()
+        val specialReference = SpecialReference(element)
+        val standardReference = StandardReference(element)
+        val references: MutableList<PsiReference> = mutableListOf<PsiReference>()
 
-        if (specialGetTemplateReference.psiFile != null) {
-            result.add(specialGetTemplateReference)
-        }
+        if (specialReference.notNull()) references.add(specialReference)
+        if (standardReference.notNull()) references.add(standardReference)
 
-        if (standardGetTemplateReference.psiFile != null) {
-            result.add(standardGetTemplateReference)
-        }
-
-        return if (result.size > 0) result.toTypedArray() else PsiReference.EMPTY_ARRAY
+        if (references.isEmpty()) return PsiReference.EMPTY_ARRAY
+        return references.toTypedArray()
     }
 }
