@@ -14,14 +14,14 @@ import com.jetbrains.php.lang.psi.elements.FunctionReference
  */
 class ReferenceContributor : PsiReferenceContributor() {
 	override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
-		val templateFunctionPattern = object : PsiNamePatternCondition<PsiElement>(
+		val getTemplateCall = object : PsiNamePatternCondition<PsiElement>(
 				"withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
 			override fun getPropertyValue(o: Any): String? {
 				return if (o is FunctionReference) o.name else null
 			}
 		}
 
-		val elementWithGetTemplateCall = psiElement().withElementType(PhpElementTypes.FUNCTION_CALL).with(templateFunctionPattern)
+		val elementWithGetTemplateCall = psiElement().withElementType(PhpElementTypes.FUNCTION_CALL).with(getTemplateCall)
 		val elementWithString = psiElement().withElementType(PhpElementTypes.STRING)
 		val elementWithParameterList = psiElement().withElementType(PhpElementTypes.PARAMETER_LIST)
 		val elementWithConcatenationExpression = psiElement().withElementType(PhpElementTypes.CONCATENATION_EXPRESSION)

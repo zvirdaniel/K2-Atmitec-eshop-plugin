@@ -32,7 +32,7 @@
         <completion.contributor language="PHP" implementationClass="cz.k2.eshop.TemplateFunction.CompletionContributor"/>
 
         // Translate Function
-        <postStartupActivity implementation="cz.k2.eshop.TranslateFunction.Startup"/>
+        <postStartupActivity implementation="cz.k2.eshop.TranslateFunction.TranslateDisplay"/>
         <psi.referenceContributor implementation="cz.k2.eshop.TranslateFunction.ReferenceContributor"/>
     </extensions>
 

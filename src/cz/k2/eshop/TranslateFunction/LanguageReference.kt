@@ -7,13 +7,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.impl.FakePsiElement
-import cz.k2.eshop.TemplateFunction.References.BasicReference
+import cz.k2.eshop.Base.BasicReference
 
 // TODO: check if works
-
-/**
- * Created by Daniel Zvir on 14.7.17.
- */
 class LanguageReference(element: PsiElement, path: String) : BasicReference(element) {
     init {
         val project = myElement.project

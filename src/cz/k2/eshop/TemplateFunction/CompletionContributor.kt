@@ -10,23 +10,35 @@ import com.jetbrains.php.lang.parser.PhpElementTypes
 import com.jetbrains.php.lang.psi.elements.FunctionReference
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
 
-/**
- * Created by Daniel Zvir on 26.4.17.
- */
 class CompletionContributor : CompletionContributor() {
-    init {
-        val templateFunctionPattern = object : PsiNamePatternCondition<PsiElement>("withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
-            override fun getPropertyValue(o: Any): String? {
-                return if (o is FunctionReference) o.name else null
-            }
-        }
+	init {
+		val getTemplateCall = object :
+				PsiNamePatternCondition<PsiElement>("withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
+			override fun getPropertyValue(o: Any): String? {
+				return if (o is FunctionReference) o.name else null
+			}
+		}
 
-        val psiWithParentString = psiElement().withParent(StringLiteralExpression::class.java)
-        val psiWithTypeParamList = psiElement().withElementType(PhpElementTypes.PARAMETER_LIST)
-        val psiWithTemplateCall = psiElement().withElementType(PhpElementTypes.FUNCTION_CALL).with(templateFunctionPattern)
+		val elementWithParentString = psiElement().withParent(StringLiteralExpression::class.java)
+		val elementWithParameterList = psiElement().withElementType(PhpElementTypes.PARAMETER_LIST)
+		val elementWithGetTemplateCall = psiElement().withElementType(PhpElementTypes.FUNCTION_CALL).with(getTemplateCall)
+		val elementWithConcatenationExpression = psiElement().withElementType(PhpElementTypes.CONCATENATION_EXPRESSION)
 
-        val elementPattern = psiWithParentString.withSuperParent(2, psiWithTypeParamList).withSuperParent(3, psiWithTemplateCall)
+		val noSuffixPattern = elementWithParentString.withSuperParent(2,
+				elementWithParameterList.withParent(
+						elementWithGetTemplateCall
+				)
+		)
 
-        extend(CompletionType.BASIC, elementPattern, CompletionProvider())
-    }
+		val someSuffixPattern = elementWithParentString.withSuperParent(2,
+				elementWithConcatenationExpression.withParent(
+						elementWithParameterList.withParent(
+								elementWithGetTemplateCall
+						)
+				)
+		)
+
+		extend(CompletionType.BASIC, noSuffixPattern, CompletionProvider())
+		extend(CompletionType.BASIC, someSuffixPattern, CompletionProvider())
+	}
 }

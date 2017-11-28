@@ -1,4 +1,4 @@
-package cz.k2.eshop.TemplateFunction.References
+package cz.k2.eshop.Base
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
