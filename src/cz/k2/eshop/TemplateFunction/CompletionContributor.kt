@@ -12,28 +12,33 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
 
 class CompletionContributor : CompletionContributor() {
 	init {
-		val getTemplateCall = object :
-				PsiNamePatternCondition<PsiElement>("withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
+		val getTemplateFunctionName = object : PsiNamePatternCondition<PsiElement>(
+				"withFunctionName", StandardPatterns.string().matches("GetTemplate")) {
 			override fun getPropertyValue(o: Any): String? {
-				return if (o is FunctionReference) o.name else null
+				return (o as? FunctionReference)?.name
 			}
 		}
 
 		val elementWithParentString = psiElement().withParent(StringLiteralExpression::class.java)
 		val elementWithParameterList = psiElement().withElementType(PhpElementTypes.PARAMETER_LIST)
-		val elementWithGetTemplateCall = psiElement().withElementType(PhpElementTypes.FUNCTION_CALL).with(getTemplateCall)
+		val elementWithGetTemplateCall = psiElement().withElementType(PhpElementTypes.FUNCTION_CALL)
 		val elementWithConcatenationExpression = psiElement().withElementType(PhpElementTypes.CONCATENATION_EXPRESSION)
 
 		val noSuffixPattern = elementWithParentString.withSuperParent(2,
 				elementWithParameterList.withParent(
-						elementWithGetTemplateCall
+						elementWithGetTemplateCall.with(
+								getTemplateFunctionName
+						)
 				)
 		)
 
 		val someSuffixPattern = elementWithParentString.withSuperParent(2,
 				elementWithConcatenationExpression.withParent(
 						elementWithParameterList.withParent(
-								elementWithGetTemplateCall
+								elementWithGetTemplateCall.with(
+										getTemplateFunctionName
+								)
+
 						)
 				)
 		)

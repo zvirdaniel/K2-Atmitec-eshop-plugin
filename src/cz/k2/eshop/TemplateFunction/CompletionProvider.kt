@@ -7,7 +7,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.ProcessingContext
-import cz.k2.eshop.Base.findAllChildrenFiles
 
 class CompletionProvider : CompletionProvider<CompletionParameters>() {
 	public override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, resultSet: CompletionResultSet) {
@@ -18,15 +17,28 @@ class CompletionProvider : CompletionProvider<CompletionParameters>() {
 						.findChild(it)
 						?.findChild("views")
 						?.let { findAllChildrenFiles(it) }
-						?.forEach { resultSet.addElement(generateElement(it)) }
+						?.forEach { resultSet.addElement(generateLookupElement(it)) }
 			}
 		}
 	}
 
-	private fun generateElement(file: VirtualFile): LookupElementBuilder {
+	private fun generateLookupElement(file: VirtualFile): LookupElementBuilder {
 		val presentableUrl = file.presentableUrl.replace("\\", "/")
 		val result = presentableUrl.substringAfter("views/").substringBefore('.')
 
 		return LookupElementBuilder.create(result)
+	}
+
+	private fun findAllChildrenFiles(directory: VirtualFile): List<VirtualFile> {
+		val result = mutableListOf<VirtualFile>()
+		for (item in directory.children) {
+			if (item.isDirectory) {
+				result.addAll(findAllChildrenFiles(item))
+			} else {
+				result.add(item)
+			}
+		}
+
+		return result
 	}
 }

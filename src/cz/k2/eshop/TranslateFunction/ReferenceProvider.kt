@@ -3,40 +3,37 @@ package cz.k2.eshop.TranslateFunction
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiManager
 import com.intellij.psi.PsiReference
 import com.intellij.psi.PsiReferenceProvider
 import com.intellij.util.ProcessingContext
-import cz.k2.eshop.Base.findFolder
+import cz.k2.eshop.Base.BasicReference
 
-/**
- * Created by Daniel Zvir on 14.7.17.
- */
 class ReferenceProvider : PsiReferenceProvider() {
-    override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-        val files = ProjectRootManager.getInstance(element.project).contentSourceRoots.asList()
-        val standardFolder = findFolder("standard", files)?.findChild("pages")?.findChild("language")?.children
-        val specialFolder = findFolder("special", files)?.findChild("pages")?.findChild("language")?.children
-        val languagePaths = mutableListOf<String>()
+	override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+		val references = mutableListOf<PsiReference>()
 
-        if (standardFolder == null && specialFolder == null) return PsiReference.EMPTY_ARRAY
-        if (standardFolder != null) languagePaths.addAll(extractLanguages(standardFolder))
-        if (specialFolder != null) languagePaths.addAll(extractLanguages(specialFolder))
-        if (languagePaths.isEmpty()) return PsiReference.EMPTY_ARRAY
+		listOf("standard", "special").forEach { folder ->
+			ProjectRootManager.getInstance(element.project).contentRoots[0].
+					findChild(folder)?.findChild("pages")?.findChild("language")?.children
+					?.mapNotNullTo(references) { generateReference(element, it) }
+		}
 
-        val references = mutableListOf<PsiReference>()
-        for (path in languagePaths) {
-            val reference = LanguageReference(element, path)
-            if (reference.notNull()) references.add(reference)
-        }
+		return references.toTypedArray()
+	}
 
-        if (references.isEmpty()) return PsiReference.EMPTY_ARRAY
+	private fun generateReference(psiElement: PsiElement, file: VirtualFile): PsiReference? {
+		val project = psiElement.project
+		val languageCode = psiElement.text.substring(1, psiElement.textLength - 1)
+		val psiFile = PsiManager.getInstance(project).findFile(file)
+		var reference: BasicReference? = null
 
-        return references.toTypedArray()
-    }
+		if (psiFile != null && psiFile.text.contains(languageCode)) {
+			val offset = psiFile.text.indexOf(languageCode, ignoreCase = true)
+			val elementAtOffset = psiFile.findElementAt(offset)
+			reference = elementAtOffset?.let { BasicReference(psiElement, it) }
+		}
 
-    private fun extractLanguages(folder: Array<VirtualFile>): MutableList<String> {
-        val list = mutableListOf<String>()
-        for (file in folder) list.add(file.path)
-        return list
-    }
+		return reference
+	}
 }

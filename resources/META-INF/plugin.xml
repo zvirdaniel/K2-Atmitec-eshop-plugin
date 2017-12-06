@@ -1,15 +1,18 @@
 <idea-plugin>
     <id>cz.k2.eshop</id>
-    <name>K2 E-Shop Integration</name>
-    <version>1.4</version>
+    <name>K2 Atmitec: e-shop integration</name>
+    <version>1.6</version>
     <vendor email="Daniel.Zvir@k2.cz" url="http://www.k2.cz">K2 atmitec s.r.o.</vendor>
 
     <description><![CDATA[
-      This plugin enables custom functionality used in our company, when developing the responsive version of our eshop.<br>
+      This plugin enables custom functionality used in our company when developing our eshop.<br>
       You can click-through file references in the GetTemplate function, and use file completion for all the files.<br>
+      Various other useful features, such as translation assistance, are also implemented.<br>
     ]]></description>
 
     <change-notes><![CDATA[
+      1.6: Translate references concrete translations<br>
+      1.5: GetTemplate references suffixed templates, completions works with suffixes<br>
       1.4: Translate function has references to all files with specified translation<br>
       1.3: Translate function shows both standard and special translations properly<br>
       1.2: GetTemplate fix for Windows users, Translate function shows translations<br>
@@ -21,7 +24,7 @@
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="145.0"/>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html on how to target different products -->
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html on how to targetElement different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends>com.jetbrains.php</depends>
     <depends>com.intellij.modules.platform</depends>
@@ -29,6 +32,7 @@
     <extensions defaultExtensionNs="com.intellij">
         // Template Function
         <psi.referenceContributor implementation="cz.k2.eshop.TemplateFunction.ReferenceContributor"/>
+        <!--suppress PluginXmlValidity -->
         <completion.contributor language="PHP" implementationClass="cz.k2.eshop.TemplateFunction.CompletionContributor"/>
 
         // Translate Function

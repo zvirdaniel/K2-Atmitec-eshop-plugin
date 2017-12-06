@@ -62,7 +62,7 @@ class TranslateDisplay : StartupActivity {
 
 					if (line.contains("\$Lng['$id']", true)) {
 						val separated = line.split("=")
-						var translation = separated.get(1).removeSuffix(";")
+						var translation = separated[1].removeSuffix(";")
 						translation = translation.removeRange(0..1)
 						val length = translation.length - 1
 						translation = translation.removeRange(length..length)
@@ -79,7 +79,11 @@ class TranslateDisplay : StartupActivity {
 		return null
 	}
 
-	private fun hideStatusBarText(project: Project) = WindowManager.getInstance().getStatusBar(project).setInfo(null)
+	private fun hideStatusBarText(project: Project) {
+		WindowManager.getInstance().getStatusBar(project).info = null
+	}
 
-	private fun displayStatusBarText(translation: String, project: Project) = WindowManager.getInstance().getStatusBar(project).setInfo(translation)
+	private fun displayStatusBarText(translation: String, project: Project) {
+		WindowManager.getInstance().getStatusBar(project).info = translation
+	}
 }
