@@ -1,4 +1,4 @@
-package cz.k2.eshop.Base
+package cz.k2.eshop.base
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase

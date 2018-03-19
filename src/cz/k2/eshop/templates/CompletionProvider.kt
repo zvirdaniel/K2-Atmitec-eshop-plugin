@@ -1,4 +1,4 @@
-package cz.k2.eshop.TemplateFunction
+package cz.k2.eshop.templates
 
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider

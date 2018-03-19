@@ -1,4 +1,4 @@
-package cz.k2.eshop.TranslateFunction
+package cz.k2.eshop.translations
 
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.editor.event.CaretEvent
@@ -14,7 +14,7 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.util.PsiTreeUtil
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
 
-class TranslateDisplay : StartupActivity {
+class TranslationDisplayActivity : StartupActivity {
 	override fun runActivity(project: Project) {
 		EditorFactory.getInstance().eventMulticaster.addCaretListener(generateCaretListener(), project)
 	}

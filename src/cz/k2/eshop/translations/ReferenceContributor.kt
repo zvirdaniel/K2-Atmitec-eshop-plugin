@@ -1,4 +1,4 @@
-package cz.k2.eshop.TranslateFunction
+package cz.k2.eshop.translations
 
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.patterns.PsiNamePatternCondition

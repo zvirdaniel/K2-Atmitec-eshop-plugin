@@ -27,12 +27,12 @@
         <!--Template Function-->
         <!-- Due to PHP not being recognised as a correct language in the completion contributor, validity checking for the following tag is suppressed. -->
         <!--suppress PluginXmlValidity -->
-        <completion.contributor language="PHP" implementationClass="cz.k2.eshop.TemplateFunction.CompletionContributor"/>
-        <psi.referenceContributor implementation="cz.k2.eshop.TemplateFunction.ReferenceContributor"/>
+        <completion.contributor language="PHP" implementationClass="cz.k2.eshop.templates.CompletionContributor"/>
+        <psi.referenceContributor implementation="cz.k2.eshop.templates.ReferenceContributor"/>
 
         <!--Translate Function-->
-        <postStartupActivity implementation="cz.k2.eshop.TranslateFunction.TranslateDisplay"/>
-        <psi.referenceContributor implementation="cz.k2.eshop.TranslateFunction.ReferenceContributor"/>
+        <postStartupActivity implementation="cz.k2.eshop.translations.TranslationDisplayActivity"/>
+        <psi.referenceContributor implementation="cz.k2.eshop.translations.ReferenceContributor"/>
     </extensions>
 
     <actions>

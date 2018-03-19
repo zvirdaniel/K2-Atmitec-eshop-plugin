@@ -1,11 +1,11 @@
-package cz.k2.eshop.TranslateFunction
+package cz.k2.eshop.translations
 
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.*
 import com.intellij.util.ProcessingContext
-import cz.k2.eshop.Base.BasicReference
+import cz.k2.eshop.base.BasicReference
 
 class ReferenceProvider : PsiReferenceProvider() {
 	override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {

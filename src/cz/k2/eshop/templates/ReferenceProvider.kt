@@ -1,4 +1,4 @@
-package cz.k2.eshop.TemplateFunction
+package cz.k2.eshop.templates
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
@@ -6,7 +6,7 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.PsiReferenceProvider
 import com.intellij.util.ProcessingContext
 import com.jetbrains.php.lang.psi.elements.ConcatenationExpression
-import cz.k2.eshop.Base.BasicReference
+import cz.k2.eshop.base.BasicReference
 
 class ReferenceProvider : PsiReferenceProvider() {
 	override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
