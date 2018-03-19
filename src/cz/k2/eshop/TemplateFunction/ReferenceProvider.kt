@@ -11,10 +11,12 @@ import cz.k2.eshop.Base.BasicReference
 class ReferenceProvider : PsiReferenceProvider() {
 	override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
 		val references: MutableList<PsiReference> = mutableListOf()
+		val parent = element.parent
 
-		when (element.parent) {
-			is ConcatenationExpression -> references.addAll(generateReferences(element))
-			else -> references.addAll(generateReferences(element, true))
+		if (parent is ConcatenationExpression) {
+			references.addAll(generateReferences(element))
+		} else {
+			references.addAll(generateReferences(element, true))
 		}
 
 		if (references.isEmpty()) return PsiReference.EMPTY_ARRAY
@@ -29,12 +31,12 @@ class ReferenceProvider : PsiReferenceProvider() {
 
 		for (path in paths) {
 			if (single) {
-				val targetFile = project.baseDir.findFileByRelativePath(path)
+				val targetFile = project.baseDir.findFileByRelativePath("$path.phtml")
 				val psiFile = targetFile?.let { PsiManager.getInstance(project).findFile(it) }
 				val reference = psiFile?.let { BasicReference(psiElement, it) }
 				reference?.let { references.add(it) }
 			} else {
-				project.baseDir.findFileByRelativePath(path + ".phtml")?.parent?.children // parent folder with phtml files
+				project.baseDir.findFileByRelativePath("$path.phtml")?.parent?.children // parent folder with phtml files
 						?.filter { !it.isDirectory && it.extension == "phtml" && it.path.contains(path) } // filter the data
 						?.map { PsiManager.getInstance(project).findFile(it) } // returns PsiFile
 						?.mapNotNullTo(references) {
