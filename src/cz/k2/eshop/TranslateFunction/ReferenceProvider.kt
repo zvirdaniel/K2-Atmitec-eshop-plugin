@@ -36,17 +36,16 @@ class ReferenceProvider : PsiReferenceProvider() {
 				val line = document.getText(TextRange.create(lineStart, lineEnd))
 
 				// If line starts with double slash, it means the code is commented out, so the translation should not be shown
-				if (line.trimStart().startsWith("//")) {
+				if (line.trimStart().startsWith("//") || !line.contains("=")) {
 					return null
 				}
 
 				val stringAfterEquals = line.substringAfter('=').trim()
 				if (stringAfterEquals.isNotEmpty()) {
-					val translation: String
-					if (stringAfterEquals.endsWith("';") && stringAfterEquals.startsWith("'")) {
-						translation = stringAfterEquals.removeSuffix("';").removePrefix("'")
+					val translation = if (stringAfterEquals.endsWith("';") && stringAfterEquals.startsWith("'")) {
+						stringAfterEquals.removeSuffix("';").removePrefix("'")
 					} else {
-						translation = stringAfterEquals.removeSuffix("\";").removePrefix("\"")
+						stringAfterEquals.removeSuffix("\";").removePrefix("\"")
 					}
 
 					val translationOffset = psiFile.text.indexOf(translation)

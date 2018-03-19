@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.startup.StartupActivity
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.WindowManager
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.util.PsiTreeUtil
@@ -46,32 +47,52 @@ class TranslateDisplay : StartupActivity {
 		}
 	}
 
-	private fun getAndDisplayTranslation(id: String, project: Project): String? {
-		val folders = listOf("standard", "special")
-		for (folder in folders) {
-			val file = ProjectRootManager.getInstance(project).contentRoots[0].findChild(folder)
-					?.findChild("pages")?.findChild("language")?.findChild("texts_cs.php")
+	private fun getAndDisplayTranslation(translationCode: String, project: Project) {
+		val specialFile = ProjectRootManager.getInstance(project).contentRoots[0].findChild("special")
+				?.findChild("pages")?.findChild("language")?.findChild("texts_cs.php")
+		val standardFile = ProjectRootManager.getInstance(project).contentRoots[0].findChild("standard")
+				?.findChild("pages")?.findChild("language")?.findChild("texts_cs.php")
 
-			val document = file?.let { FileDocumentManager.getInstance().getDocument(it) }
-			if (file != null && document != null) {
-				val lines = document.lineCount - 1
-				for (lineNumber in 0..lines) {
-					val lineStart = document.getLineStartOffset(lineNumber)
-					val lineEnd = document.getLineEndOffset(lineNumber)
-					val line = document.getText(TextRange(lineStart, lineEnd)).trim()
+		if (specialFile != null) {
+			val specialTranslation = getTranslation(translationCode, specialFile)
+			if (specialTranslation != null) {
+				val text = "CS Special: $specialTranslation"
+				displayStatusBarText(text, project)
+				return
+			}
+		}
 
-					if (line.contains("\$Lng['$id']", true)) {
-						val separated = line.split("=")
-						var translation = separated[1].removeSuffix(";")
-						translation = translation.removeRange(0..1)
-						val length = translation.length - 1
-						translation = translation.removeRange(length..length)
-						val text = "CS $folder: $translation"
-						displayStatusBarText(text, project)
-						break
-					} else {
-						hideStatusBarText(project)
-					}
+		if (standardFile != null) {
+			val standardTranslation = getTranslation(translationCode, standardFile)
+			val text = "CS Standard: $standardTranslation"
+			displayStatusBarText(text, project)
+			return
+		}
+
+		hideStatusBarText(project)
+	}
+
+	private fun getTranslation(translationCode: String, file: VirtualFile): String? {
+		val document = FileDocumentManager.getInstance().getDocument(file)
+
+		if (document != null && document.text.contains(translationCode)) {
+			val translationCodeOffset = document.text.indexOf(translationCode, ignoreCase = true)
+			val lineOffset = document.getLineNumber(translationCodeOffset)
+			val lineStart = document.getLineStartOffset(lineOffset)
+			val lineEnd = document.getLineEndOffset(lineOffset)
+			val line = document.getText(TextRange.create(lineStart, lineEnd))
+
+			// If line starts with double slash, it means the code is commented out, so the translation should not be shown
+			if (line.trimStart().startsWith("//") || !line.contains("=")) {
+				return null
+			}
+
+			val stringAfterEquals = line.substringAfter('=').trim()
+			if (stringAfterEquals.isNotEmpty()) {
+				return if (stringAfterEquals.endsWith("';") && stringAfterEquals.startsWith("'")) {
+					stringAfterEquals.removeSuffix("';").removePrefix("'")
+				} else {
+					stringAfterEquals.removeSuffix("\";").removePrefix("\"")
 				}
 			}
 		}
