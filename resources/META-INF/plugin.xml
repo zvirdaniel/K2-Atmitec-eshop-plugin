@@ -1,17 +1,17 @@
 <idea-plugin>
     <id>cz.k2.eshop</id>
     <name>K2 E-Shop Integration</name>
-    <version>1.7</version>
+    <version>1.8</version>
     <vendor email="Daniel.Zvir@k2.cz" url="http://www.k2.cz">K2 atmitec s.r.o.</vendor>
 
     <description><![CDATA[
-      This plugin enables custom functionality used in our company when developing our eshop.<br>
+      This plugin enables custom functionality used in our company when developing our products.<br>
       You can click-through file references in the GetTemplate function, and use file completion for all the files.<br>
       Various other useful features, such as translation assistance, are also implemented.<br>
     ]]></description>
 
     <change-notes><![CDATA[
-      Translation references show values instead of translation codes. Status bar displays standard translations even if a special file is present.
+      Implemented features enabling fast creation of special views and special classes.
     ]]>
     </change-notes>
 
@@ -20,15 +20,14 @@
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
-    <depends>com.jetbrains.php</depends>
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.jetbrains.php</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!--Template Function-->
-        <!-- Due to PHP not being recognised as a correct language in the completion contributor, validity checking for the following tag is suppressed. -->
         <!--suppress PluginXmlValidity -->
-        <completion.contributor language="PHP" implementationClass="cz.k2.eshop.templates.CompletionContributor"/>
-        <psi.referenceContributor implementation="cz.k2.eshop.templates.ReferenceContributor"/>
+        <completion.contributor order="first" language="PHP" implementationClass="cz.k2.eshop.views.CompletionContributor"/>
+        <psi.referenceContributor implementation="cz.k2.eshop.views.ReferenceContributor"/>
 
         <!--Translate Function-->
         <postStartupActivity implementation="cz.k2.eshop.translations.TranslationDisplayActivity"/>
@@ -36,6 +35,47 @@
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <action id="k2.GoToRenderingClass"
+                class="cz.k2.eshop.views.actions.GoToRenderingClass"
+                text="Go to the rendering class"
+                description="Goes to the class which renders this view"
+                icon="PluginIcons.K2">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+
+        <action id="k2.CreateSpecialView"
+                class="cz.k2.eshop.views.actions.CreateSpecialView"
+                text="Create a special view"
+                description="Creates a special view from the current file"
+                icon="PluginIcons.K2">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+        <action id="k2.CreateSpecialClassInPages"
+                class="cz.k2.eshop.classes.actions.CreateSpecialClassInPages"
+                text="Create a special file"
+                description="Creates a special file from the current class"
+                icon="PluginIcons.K2">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="k2.CreateSpecialView"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+        <action id="k2.CreateSpecialClassInApp"
+                class="cz.k2.eshop.classes.actions.CreateSpecialClassInApp"
+                text="Create a special file"
+                description="Creates a special file from the current class"
+                icon="PluginIcons.K2">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="k2.CreateSpecialClassInPages"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+
+        <action id="k2.CreateSpecialMethod"
+                class="cz.k2.eshop.classes.actions.CreateSpecialMethod"
+                text="Copy this method to the special file" description="Copies this method to the special file"
+                icon="PluginIcons.K2">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>

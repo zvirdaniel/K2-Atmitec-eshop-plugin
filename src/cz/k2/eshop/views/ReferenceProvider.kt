@@ -1,4 +1,4 @@
-package cz.k2.eshop.templates
+package cz.k2.eshop.views
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
