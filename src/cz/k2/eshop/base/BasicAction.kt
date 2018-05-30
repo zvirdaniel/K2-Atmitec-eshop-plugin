@@ -99,8 +99,8 @@ abstract class BasicAction : AnAction() {
 	/**
 	 * Shows and hides the context menu action to create a special, uses the abstract function above
 	 */
-	override fun update(event: AnActionEvent?) {
-		val psiFile = CommonDataKeys.PSI_FILE.getData(event!!.dataContext)
+	override fun update(event: AnActionEvent) {
+		val psiFile = CommonDataKeys.PSI_FILE.getData(event.dataContext)
 
 		if (psiFile == null) {
 			event.presentation.isEnabledAndVisible = false

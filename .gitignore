@@ -26,8 +26,6 @@ crashlytics-build.properties
 fabric.properties
 ### Java template
 # Compiled class file
-*.class
-
 # Log file
 *.log
 

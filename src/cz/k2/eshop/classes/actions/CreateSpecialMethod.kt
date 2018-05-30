@@ -28,9 +28,20 @@ class CreateSpecialMethod : AnAction() {
 		ApplicationManager.getApplication().runWriteAction { copyMethod(e) }
 	}
 
-	override fun update(e: AnActionEvent?) {
-		val method = findPsiElementFromActionEvent(e!!)
-		e.presentation.isEnabledAndVisible = method != null
+	override fun update(event: AnActionEvent?) {
+		val psiFile = event?.dataContext?.let { CommonDataKeys.PSI_FILE.getData(it) }
+
+		if (psiFile == null) {
+			event?.presentation?.isEnabledAndVisible = false
+			return
+		}
+
+		val isMethodExisting = findPsiElementFromActionEvent(event) != null
+		val isClassInStandardApp = psiFile.virtualFile.path.contains("/standard/App/")
+		val isClassInStandardPages = psiFile.virtualFile.path.contains("/standard/pages/") &&
+				!psiFile.virtualFile.path.contains("/standard/pages/languages")
+
+		event.presentation.isEnabledAndVisible = (isClassInStandardApp || isClassInStandardPages) && isMethodExisting
 	}
 
 	private fun copyMethod(e: AnActionEvent) {
