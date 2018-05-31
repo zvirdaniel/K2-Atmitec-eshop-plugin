@@ -36,12 +36,19 @@ class TranslationDisplayActivity : StartupActivity {
 				if (project != null) {
 					val file = PsiDocumentManager.getInstance(project).getPsiFile(editor.document)
 					val element = file?.let { PsiTreeUtil.findElementOfClassAtOffset(it, offset, StringLiteralExpression::class.java, false) }
-					if (element != null && element.language.displayName.toLowerCase() == "php" &&
-							element.parent.parent.node.firstChildNode.text.toLowerCase() == "translate") {
-						getAndDisplayTranslation(element.contents, project)
-					} else {
-						hideStatusBarText(project)
+
+					if (element != null) {
+						val isPhpFile = element.language.displayName.toLowerCase() == "php"
+						val isTranslationMethod = element.parent.parent.node.firstChildNode.text.toLowerCase() == "translate"
+						val isGlobalsTranslation = element.parent.parent.parent.node.text.startsWith("\$GLOBALS['Lng']")
+
+						if (isPhpFile && (isTranslationMethod || isGlobalsTranslation)) {
+							getAndDisplayTranslation(element.contents, project)
+							return
+						}
 					}
+
+					hideStatusBarText(project)
 				}
 			}
 		}

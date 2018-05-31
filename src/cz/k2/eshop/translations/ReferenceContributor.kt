@@ -11,24 +11,38 @@ import com.jetbrains.php.lang.psi.elements.FunctionReference
 
 class ReferenceContributor : PsiReferenceContributor() {
 	override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
-		val translateFunctionName = object : PsiNamePatternCondition<PsiElement>(
+		val elementWithTranslateFunctionName = object : PsiNamePatternCondition<PsiElement>(
 				"withFunctionName", StandardPatterns.string().matches("Translate")) {
 			override fun getPropertyValue(o: Any): String? {
 				return (o as? FunctionReference)?.name
 			}
 		}
 
-		val elementWithParameterList = psiElement().withElementType(PhpElementTypes.PARAMETER_LIST)
-		val elementWithFunctionCall = psiElement().withElementType(PhpElementTypes.FUNCTION_CALL)
+		val elementParameterList = psiElement().withElementType(PhpElementTypes.PARAMETER_LIST)
+		val elementFunctionCall = psiElement().withElementType(PhpElementTypes.FUNCTION_CALL)
 
-		val pattern = psiElement().withParent(
-				elementWithParameterList.withParent(
-						elementWithFunctionCall.with(
-								translateFunctionName
+		val translatePattern = psiElement().withParent(
+				elementParameterList.withParent(
+						elementFunctionCall.with(
+								elementWithTranslateFunctionName
 						)
 				)
 		)
 
-		registrar.registerReferenceProvider(pattern, ReferenceProvider(), PsiReferenceRegistrar.DEFAULT_PRIORITY)
+
+		val elementString = psiElement().withElementType(PhpElementTypes.STRING)
+		val elementArrayIndex = psiElement().withElementType(PhpElementTypes.ARRAY_INDEX)
+		val elementArrayAccessExpression = psiElement().withElementType(PhpElementTypes.ARRAY_ACCESS_EXPRESSION)
+
+		val globalsLngPattern = elementString.withParent(
+				elementArrayIndex.withParent(
+						elementArrayAccessExpression.withFirstChild(
+								elementArrayAccessExpression.withText("\$GLOBALS['Lng']")
+						)
+				)
+		)
+
+		registrar.registerReferenceProvider(translatePattern, ReferenceProvider(), PsiReferenceRegistrar.DEFAULT_PRIORITY)
+		registrar.registerReferenceProvider(globalsLngPattern, ReferenceProvider(), PsiReferenceRegistrar.DEFAULT_PRIORITY)
 	}
 }

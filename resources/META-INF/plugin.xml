@@ -11,7 +11,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      Action "Copy this method to the special file" will be hidden in inappropriate situations.
+      Improved translation assistance for our older projects, fixed reference contributors.
     ]]>
     </change-notes>
 
@@ -26,11 +26,11 @@
     <extensions defaultExtensionNs="com.intellij">
         <!--Template Function-->
         <completion.contributor order="first" language="PHP" implementationClass="cz.k2.eshop.views.CompletionContributor"/>
-        <psiFile.referenceContributor implementation="cz.k2.eshop.views.ReferenceContributor"/>
+        <psi.referenceContributor implementation="cz.k2.eshop.views.ReferenceContributor"/>
 
         <!--Translate Function-->
         <postStartupActivity implementation="cz.k2.eshop.translations.TranslationDisplayActivity"/>
-        <psiFile.referenceContributor implementation="cz.k2.eshop.translations.ReferenceContributor"/>
+        <psi.referenceContributor implementation="cz.k2.eshop.translations.ReferenceContributor"/>
     </extensions>
 
     <actions>

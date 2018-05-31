@@ -7,6 +7,8 @@ import com.intellij.psi.*
 import com.intellij.util.ProcessingContext
 import cz.k2.eshop.base.BasicReference
 
+// TODO: Rewrite this using: http://www.jetbrains.org/intellij/sdk/docs/tutorials/custom_language_support/reference_contributor.html
+
 class ReferenceProvider : PsiReferenceProvider() {
 	override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
 		val references = mutableListOf<PsiReference>()
