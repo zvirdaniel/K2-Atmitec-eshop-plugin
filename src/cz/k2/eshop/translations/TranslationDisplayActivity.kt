@@ -40,7 +40,8 @@ class TranslationDisplayActivity : StartupActivity {
 					if (element != null) {
 						val isPhpFile = element.language.displayName.toLowerCase() == "php"
 						val isTranslationMethod = element.parent.parent.node.firstChildNode.text.toLowerCase() == "translate"
-						val isGlobalsTranslation = element.parent.parent.parent.node.text.startsWith("\$GLOBALS['Lng']")
+						val isGlobalsTranslation = element.parent.parent.parent.node.text.startsWith("\$GLOBALS['Lng']") &&
+								element.contents != "Lng"
 
 						if (isPhpFile && (isTranslationMethod || isGlobalsTranslation)) {
 							getAndDisplayTranslation(element.contents, project)

@@ -1,11 +1,13 @@
 package cz.k2.eshop.base
 
+import com.intellij.notification.Notification
+import com.intellij.notification.NotificationType
+import com.intellij.notification.Notifications
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiFile
 import java.io.IOException
@@ -58,14 +60,14 @@ abstract class BasicAction : AnAction() {
 
 		// Creating the directory tree
 		val directoryToCopy = buildSpecialDirectoryTree(outputSpecialFilePathRelative, psiFile.project.baseDir)
-				?: return fail("Creation of the required directory structure has failed.")
+				?: return fail("Creating the directory structure failed.")
 
 
 		return try {
 			val fileName = outputSpecialFilePath.substring(outputSpecialFilePath.lastIndexOf("/") + 1)
 			baseFileToCopy.copy(null, directoryToCopy, fileName)
 		} catch (e1: IOException) {
-			fail("Creation of the special file has failed.")
+			fail("Creating the special file failed.")
 		}
 
 	}
@@ -75,7 +77,7 @@ abstract class BasicAction : AnAction() {
 	 */
 	private fun getSpecialFile(virtualFile: VirtualFile, project: Project): VirtualFile? {
 		val specialPath = getSpecialPathFromStandard(virtualFile, project)
-				?: return fail("Internal error while retrieving the special file.")
+				?: return fail("Retrieving the special file failed.")
 
 		val path = relativePathInProject(specialPath, project)
 
@@ -122,8 +124,11 @@ abstract class BasicAction : AnAction() {
 	 * Show an error message dialog and returns null
 	 * @param message String will be shown in the message dialog, implicitly: "Internal error while creating the special file."
 	 */
-	private fun fail(message: String = "Internal error while creating the special file."): Nothing? {
-		Messages.showMessageDialog(message, "Error", Messages.getErrorIcon())
+	private fun fail(message: String = "Creating a special file failed."): Nothing? {
+		val notification = Notification("K2 E-Shop Integration", "K2 E-Shop Integration", message, NotificationType.ERROR)
+
+		Notifications.Bus.notify(notification)
+
 		return null
 	}
 }

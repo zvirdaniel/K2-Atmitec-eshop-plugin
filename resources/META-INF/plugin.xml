@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>cz.k2.eshop</id>
     <name>K2 E-Shop Integration</name>
-    <version>1.9</version>
+    <version>2.0</version>
     <vendor email="Daniel.Zvir@k2.cz" url="http://www.k2.cz">K2 atmitec s.r.o.</vendor>
 
     <description><![CDATA[
@@ -11,7 +11,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      Improved translation assistance for our older projects, fixed reference contributors.
+      Replaced error dialogs with notifications, changed few strings. Improved translation assistance.
     ]]>
     </change-notes>
 
@@ -25,6 +25,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!--Template Function-->
+        <!--suppress PluginXmlValidity -->
         <completion.contributor order="first" language="PHP" implementationClass="cz.k2.eshop.views.CompletionContributor"/>
         <psi.referenceContributor implementation="cz.k2.eshop.views.ReferenceContributor"/>
 
